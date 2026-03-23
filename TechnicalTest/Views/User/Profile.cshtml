@@ -1,0 +1,137 @@
+﻿@using TechnicalTest.Models.Enums
+@using TechnicalTest.ViewModels
+@model UserProfileViewModel
+
+@{
+    ViewData["Title"] = "Perfil de Usuario";
+}
+
+<div class="container py-4">
+    <div class="mb-2 text-muted small">Perfil de usuario</div>
+    <h2 class="h3 fw-bold mb-4">Perfil de usuario</h2>
+
+    <div class="bg-white p-4 shadow-sm rounded-3 border">
+        
+        <div class="d-flex align-items-center mb-4 pb-3 border-bottom">
+            <div class="rounded-circle d-flex align-items-center justify-content-center text-primary me-4"
+                 style="width: 100px; height: 100px; background-color: #e6f0ff; border: 2px solid #b3d1ff;">
+                <i class="bi bi-person-fill" style="font-size: 5rem; line-height: 1;"></i>
+            </div>
+            
+            <div>
+                <div class="d-flex align-items-center gap-2 mb-1">
+                    <h3 class="h4 fw-bold mb-0">@Model.FullName</h3>
+                    <span class="badge bg-success-subtle text-success rounded-pill fw-medium"
+                          style="font-size: 0.75rem; background-color: #d1e7dd !important;">
+                        Activo
+                    </span>
+                </div>
+                <div class="text-secondary small mb-1">@Model.RoleName</div>
+                <div class="text-secondary small">@Model.MinistryName</div>
+            </div>
+        </div>
+
+        <ul class="nav nav-tabs border-bottom mb-4">
+            <li class="nav-item">
+                <a class="nav-link active fw-bold text-primary border-0 border-bottom border-primary border-3" href="#">
+                    Información básica
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link text-secondary" href="#">Responsabilidades</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link text-secondary" href="#">Historial de responsabilidades</a>
+            </li>
+        </ul>
+
+        <div class="row g-3">
+            
+            <div class="col-md-4">
+                <label class="form-label fw-bold text-secondarySmall small">Nombres</label>
+                <input asp-for="FirstName" class="form-control bg-light border-0" readonly />
+            </div>
+            <div class="col-md-4">
+                <label class="form-label fw-bold text-secondarySmall small">Primer Apellido</label>
+                <input asp-for="FirstLastName" class="form-control bg-light border-0" readonly />
+            </div>
+            <div class="col-md-4">
+                <label class="form-label fw-bold text-secondarySmall small">Segundo Apellido</label>
+                <input asp-for="SecondLastName" class="form-control bg-light border-0" readonly />
+            </div>
+
+            <div class="col-md-4">
+                <label class="form-label fw-bold text-secondarySmall small">Tipo de Documento de Identidad</label>
+                <input asp-for="DocumentType" class="form-control bg-light border-0" readonly />
+            </div>
+            <div class="col-md-4">
+                <label class="form-label fw-bold text-secondarySmall small">N° de Documento de Identidad</label>
+                <input asp-for="DocumentNumber" class="form-control bg-light border-0" readonly />
+            </div>
+            <div class="col-md-4">
+                <label class="form-label fw-bold text-secondarySmall small">Fecha de nacimiento</label>
+                <input type="text" class="form-control bg-light border-0" value="@Model.BirthDate.ToString("dd/MM/yyyy")" readonly />
+            </div>
+
+            <div class="col-md-4">
+                <label class="form-label fw-bold text-secondarySmall small">Nacionalidad</label>
+                <input asp-for="Nationality" class="form-control bg-light border-0" readonly />
+            </div>
+            <div class="col-md-4">
+                <label class="form-label fw-bold text-secondarySmall small">Sexo</label>
+                <input asp-for="Gender" class="form-control bg-light border-0" readonly />
+            </div>
+            <div class="col-md-4">
+                <label class="form-label fw-bold text-secondarySmall small">Correo electrónico principal</label>
+                <div class="input-group">
+                    <input type="email" class="form-control bg-light border-0" value="@Model.Email" readonly />
+                    <span class="input-group-text bg-light border-0">
+                        <i class="bi bi-pencil text-primary" style="cursor: pointer;"></i>
+                    </span>
+                </div>
+            </div>
+
+            <div class="col-md-4">
+                <label class="form-label fw-bold text-secondarySmall small">Correo electrónico secundario <span class="text-muted">(Opcional)</span></label>
+                <input 
+                    asp-for="SecondaryEmail"
+                    class="form-control border-secondary-subtle bg-white" />
+            </div>
+            <div class="col-md-4">
+                <label class="form-label fw-bold text-secondarySmall small">Teléfono Móvil</label>
+                <div class="input-group">
+                    <input asp-for="FormattedPhoneNumber" class="form-control bg-light border-0" readonly />
+                    <span class="input-group-text bg-light border-0">
+                        <i class="bi bi-pencil text-primary" style="cursor: pointer;"></i>
+                    </span>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <label class="form-label fw-bold text-secondarySmall small">Teléfono secundario <span class="text-muted">(Opcional)</span></label>
+                <div class="d-flex gap-2 align-items-center">
+                    <div class="flex-shrink-0" style="width: 80px;">
+                        <select 
+                            asp-for="TypeSecondaryPhoneNumber"
+                            class="form-select border-secondary-subtle bg-light text-secondary"
+                            asp-items="Html.GetEnumSelectList<PhoneType>()">
+                            <option value="">Tipo</option>
+                        </select>
+                    </div>
+                    <input 
+                        asp-for="FormattedSecondaryPhoneNumber"
+                        class="form-control border-secondary-subtle flex-grow-1 bg-light text-secondary"
+                        id="secondaryPhone" />
+                </div>
+            </div>
+
+            <div class="col-md-4">
+                <label class="form-label fw-bold text-secondarySmall small">Tipo de Contratación</label>
+                <input asp-for="TypeContract" class="form-control bg-light border-0" readonly />
+            </div>
+            <div class="col-md-4">
+                <label class="form-label fw-bold text-secondarySmall small">Fecha de contratación</label>
+                <input type="text" class="form-control bg-light border-0" value="@Model.HiringDate.ToString("dd/MM/yyyy")" readonly />
+            </div>
+        </div>    
+    </div>
+</div>

@@ -1,0 +1,137 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - TechnicalTest</title>
+    <script type="importmap"></script>
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css">
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/TechnicalTest.styles.css" asp-append-version="true" />
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital@0;1&display=swap" rel="stylesheet">
+
+</head>
+<body>
+    <header>
+        <nav class="navbar navbar-expand-sm navbar-dark custom-header-footer border-bottom box-shadow mb-3 p-2">
+            <div class="container-fluid">
+                <button class="btn btn-outline-light me-2" type="button" data-bs-toggle="offcanvas" data-bs-target="#sidebarMenu">
+                    <i class="bi bi-list fs-3"></i>
+                </button>
+
+                <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
+                    <ul class="navbar-nav ms-auto align-items-center">
+                        @if (User.Identity.IsAuthenticated)
+                        {
+                            <li class="nav-item px-2"><i class="bi bi-question-lg fs-3 text-white"></i></li>
+                            <li class="nav-item px-2"><i class="bi bi-bell-fill fs-4 text-white"></i></li>
+                            <li class="nav-item px-2"><i class="bi bi-person-fill fs-3 text-white"></i></li>
+                            <li class="nav-item px-3 text-white">
+                                <div class="d-flex flex-column">
+                                    <span style="font-size: 0.9rem;">@User.Identity.Name</span>
+                                    <span class="small opacity-75" style="font-size: 0.7rem;">@User.FindFirst(System.Security.Claims.ClaimTypes.Role)?.Value</span>
+                                </div>
+                            </li>
+                        }
+                    </ul>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <div class="offcanvas offcanvas-start bg-white text-black" tabindex="-1" id="sidebarMenu" aria-labelledby="sidebarMenuLabel">
+        <div class="offcanvas-body p-0">
+            <ul class="list-group list-group-flush mt-3">
+                <li class="nav-item">
+                    <a asp-controller="Home" asp-action="Index" class="list-group-item list-group-item-action border-0 py-3 text-black" title="Inicio">
+                        <i class="bi bi-house"></i>
+                    </a>
+                </li>
+                @if (User.Identity.IsAuthenticated)
+                {
+                    <li class="nav-item">
+                        <a asp-controller="User" asp-action="Profile" class="list-group-item list-group-item-action border-0 py-3 text-black" title="Perfil">
+                            <i class="bi bi-file-earmark-plus"></i>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="#" class="list-group-item list-group-item-action border-0 py-3 text-black" title="Buscar">
+                            <i class="bi bi-search"></i>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <form asp-controller="Auth" asp-action="Logout" method="post">
+                            <button type="submit" class="list-group-item list-group-item-action border-0 py-3 text-danger" title="Cerrar Sesión">
+                                <i class="bi bi-box-arrow-right"></i>
+                            </button>
+                        </form>
+                    </li>
+                }
+                else
+                {
+                    <li class="nav-item">
+                        <a asp-controller="Auth" asp-action="Login" class="list-group-item list-group-item-action border-0 py-3 text-black" title="Inicio Sesion">
+                            <i class="bi bi-box-arrow-in-left"></i>
+                        </a>
+                    </li>
+                }
+            </ul>
+        </div>
+    </div>
+
+    <div class="modal fade" id="sessionModal" tabindex="-1" data-bs-backdrop="static" data-bs-keyboard="false">
+        <div class="modal-dialog modal-xl modal-dialog-centered">
+            <div class="modal-content border-0 shadow-lg rounded-3">
+            
+                <div class="modal-header border-0 pt-4 pb-0 ps-4">
+                    <div class="d-flex align-items-center">
+                        <div class="bg-warning rounded-circle d-flex align-items-center justify-content-center me-3" style="width: 40px; height: 40px;">
+                            <span class="text-white fw-bold fs-5">!</span>
+                        </div>
+                        <h5 class="modal-title fs-4 fw-normal text-dark">Su sesión esta a punto de expirar</h5>
+                    </div>
+                </div>
+
+                <div class="modal-body pt-2 pb-1 ps-4 text-secondary">
+                    <p class="mb-0 ms-5 fs-6">
+                        Por seguridad, su sesión expirará en
+                        <span id="sessionTimer" class="fw-bold text-dark">--:--</span>
+                        <span id="timerUnit" class="fw-bold text-dark">minutos</span>. Para continuar, seleccione "Extender sesión"
+                    </p>
+                </div>
+
+                <div class="modal-footer border-0 pt-0 pb-4 pe-4">
+                    <button type="button" class="btn btn-warning px-4 py-2 text-capitalize text-dark" onclick="extendSession()">
+                        Extender sesión
+                    </button>
+                </div>
+            
+            </div>
+        </div>
+    </div>
+
+    <div class="container">
+        <main role="main" class="pb-3">
+            @RenderBody()
+        </main>
+    </div>
+
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/js/site.js" asp-append-version="true"></script>
+    @if (User.Identity.IsAuthenticated)
+    {
+        <script>
+            document.addEventListener("DOMContentLoaded", () => {
+                if (typeof startTimers === "function") {
+                    startTimers();
+                }
+            });
+        </script>
+    }
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>

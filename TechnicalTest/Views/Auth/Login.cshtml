@@ -1,0 +1,117 @@
+﻿@using TechnicalTest.ViewModels
+@model LoginViewModel
+
+@{
+    ViewData["Title"] = "Login";
+}
+
+@if (ViewBag.AlertMessage != null)
+{
+    <div id="session-alert"
+         class="d-flex align-items-center bg-custom-light-blue text-black border-start border-5 border-primary rounded-0 p-3 shadow-lg position-fixed bottom-0 end-0 m-4"
+         role="alert"
+         style="z-index: 9999; max-width: 400px; min-width: 300px;">
+        
+        <div class="bg-primary text-white rounded-circle d-flex align-items-center justify-content-center me-3 flex-shrink-0"
+             style="width: 40px; height: 40px;">
+            <i class="bi bi-info-lg fs-4"></i>
+        </div>
+
+        <div class="flex-grow-1">
+            <p class="mb-0 small fw-normal">
+                @ViewBag.AlertMessage
+            </p>
+        </div>
+    </div>
+}
+
+<div class="d-flex flex-column align-items-center justify-content-center py-5">
+    <div class="bg-white p-4 shadow-sm rounded-3 mb-3 border" style="max-width: 400px; width: 100%;">
+        <form asp-controller="Auth" asp-action="Login" method="post" id="loginForm">
+            <div asp-validation-summary="ModelOnly" class="text-danger small mb-3"></div>
+        
+            <div class="row g-0 mb-4 border rounded-2 overflow-hidden">
+                <div class="col-6 bg-secondary text-white text-center py-2 fw-medium">DNI</div>
+                <div class="col-6 bg-white text-secondary text-center py-2 fw-medium border-start">CE</div>
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label fw-bold text-secondary small">Usuario</label>
+                <div class="input-group">
+                    <span class="input-group-text bg-white border-end-0">
+                        <i class="bi bi-person text-secondary"></i>
+                    </span>
+                    <input asp-for="UserName" class="form-control border-start-0 ps-0" placeholder="Ingresar usuario" />
+                </div>
+                <span asp-validation-for="UserName" class="text-danger"></span>
+            </div>
+
+            <div class="mb-2">
+                <label class="form-label fw-bold text-secondary small">Contraseña</label>
+                <div class="input-group">
+                    <span class="input-group-text bg-white border-end-0">
+                        <i class="bi bi-lock text-secondary"></i>
+                    </span>
+                    <input asp-for="Password" type="password" id="passwordInput" class="form-control border-start-0 border-end-0 ps-0" placeholder="Ingresar contraseña" required>
+                    <span class="input-group-text bg-white border-start-0">
+                        <i class="bi bi-eye text-secondary" id="togglePassword" style="cursor: pointer;"></i>
+                    </span>
+                </div>
+                <span asp-validation-for="Password" class="text-danger"></span>
+            </div>
+
+            <div class="mb-4">
+                <a asp-controller="Account" asp-action="ForgotPassword" class="text-decoration-none small fw-medium" style="color: #0056b3;">¿Olvidó su contraseña?</a>
+            </div>
+
+            <button type="submit" id="btnSubmit" class="btn btn-primary w-100 text-white py-2 fw-medium border-0" disabled>
+                Ingresar
+            </button>
+
+        </form>
+    </div>
+
+    <div class="bg-white p-3 shadow-sm rounded-3 d-flex align-items-center border" style="max-width: 400px; width: 100%;">
+        <div class="me-3">
+            <div class="rounded-circle d-flex align-items-center justify-content-center" style="width: 50px; height: 50px; background-color: #f0f7ff;">
+                <i class="bi bi-headset fs-3 text-primary"></i>
+            </div>
+        </div>
+        <div class="small">
+            <span class="text-secondary">¿Necesita ayuda?, </span>
+            <a href="#" class="text-decoration-none fw-bold" style="color: #007bff;">contacte con el área de soporte.</a>
+        </div>
+    </div>
+
+</div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+
+    <script>
+        const togglePassword = document.querySelector('#togglePassword');
+        const password = document.querySelector('#passwordInput');
+        togglePassword.addEventListener('click', function (e) {
+            const type = password.getAttribute('type') === 'password' ? 'text' : 'password';
+            password.setAttribute('type', type);
+            this.classList.toggle('bi-eye');
+            this.classList.toggle('bi-eye-slash');
+        });
+
+        $(document).ready(function () {
+            $('#loginForm').on('input change', function () {
+                $('#btnSubmit').prop('disabled', !$(this).valid());
+            });
+
+            const alertElement = document.getElementById('session-alert');
+            if (alertElement) {
+                setTimeout(() => {
+                    const bsAlert = new bootstrap.Alert(alertElement);
+                    bsAlert.close();
+                }, 5000);
+            }
+        });
+    </script>
+}

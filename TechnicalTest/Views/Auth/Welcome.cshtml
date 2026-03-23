@@ -1,0 +1,25 @@
+﻿@model string
+
+<div class="container-fluid p-0 vh-100 bg-light d-flex flex-column">
+    <main class="flex-grow-1 d-flex align-items-center justify-content-center position-relative"
+          style="background-image: url('/img/fondo-machu-picchu.png'); background-size: cover; background-position: center;">
+        
+        <div class="card border-0 shadow-lg p-5 text-center" style="max-width: 450px; border-radius: 12px;">
+            <div class="card-body">
+                <h3 class="fw-bold mb-4">¡Bienvenid&#64;, @Model!</h3>
+
+                <p class="text-secondary mb-1">Su cuenta en el aplicativo X está activada.</p>
+                <p class="text-secondary mb-5">Ya puede iniciar sesión.</p>
+
+                <div class="d-grid">
+                    <a asp-action="Login" asp-controller="Auth" class="btn btn-primary py-2 fw-bold"
+                           style="background-color: #0056AC; border: none; border-radius: 6px;">
+                        Iniciar sesión
+                    </a>
+                </div>
+
+            </div>
+        </div>
+
+    </main>
+</div>
